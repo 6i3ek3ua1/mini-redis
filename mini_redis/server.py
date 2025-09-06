@@ -143,13 +143,7 @@ class KVServer:
                 return -2
             return int(exp - now)
 
-    # NEW: управление дефолтным TTL
     def defaultttl(self, *args):
-        """
-        DEFAULTTTL            -> вернуть текущее (сек) или -1, если выключен
-        DEFAULTTTL <seconds>  -> установить (нев отрицательное)
-        DEFAULTTTL OFF        -> выключить
-        """
         if len(args) == 0:
             return -1 if self._default_ttl is None else int(self._default_ttl)
         if len(args) != 1:
