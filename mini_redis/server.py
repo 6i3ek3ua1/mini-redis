@@ -5,8 +5,8 @@ import time
 from io import TextIOWrapper
 from time import monotonic
 
-from errors import CommandError, Error, Disconnect
-from protocol import ProtocolHandler
+from mini_redis.errors import CommandError, Error, Disconnect
+from mini_redis.protocol import ProtocolHandler
 
 
 class ThreadingLimitedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):

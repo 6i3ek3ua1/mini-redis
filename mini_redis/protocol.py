@@ -1,6 +1,6 @@
 from io import BytesIO
 
-from errors import Disconnect, CommandError, Error
+from mini_redis.errors import Disconnect, CommandError, Error
 
 
 class ProtocolHandler(object):
