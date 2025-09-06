@@ -61,21 +61,24 @@ class ProtocolHandler(object):
             data = data.encode('utf-8')
 
         if isinstance(data, bytes):
-            buf.write('$%s\r\n%s\r\n' % (len(data), data))
+            buf.write(b'$%d\r\n' % len(data))
+            buf.write(data)
+            buf.write(b'\r\n')
         elif isinstance(data, int):
-            buf.write(':%s\r\n' % data)
+            buf.write(b':%d\r\n' % data)
         elif isinstance(data, Error):
-            buf.write('-%s\r\n' % Error.message)
+            msg = data.message.encode('utf-8')
+            buf.write(b'-' + msg + b'\r\n')
         elif isinstance(data, (list, tuple)):
-            buf.write('*%s\r\n' % len(data))
+            buf.write(b'*%d\r\n' % len(data))
             for item in data:
                 self._write(buf, item)
         elif isinstance(data, dict):
-            buf.write('%%%s\r\n' % len(data))
-            for key in data:
-                self._write(buf, key)
-                self._write(buf, data[key])
+            buf.write(b'%%%d\r\n' % len(data))
+            for k, v in data.items():
+                self._write(buf, k)
+                self._write(buf, v)
         elif data is None:
-            buf.write('$-1\r\n')
+            buf.write(b'$-1\r\n')
         else:
             raise CommandError('unrecognized type: %s' % type(data))

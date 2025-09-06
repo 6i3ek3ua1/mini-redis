@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  mini-redis:
+    build: .
+    container_name: mini-redis
+    ports:
+      - "31337:31337"
+    environment:
+      MINIREDIS_DEFAULT_TTL: "60"
+      BIND: "0.0.0.0"
+      PORT: "31337"
+    restart: unless-stopped
+    command: ["python", "server.py"]
+
+  client:
+    build: .
+    depends_on:
+      - mini-redis
+    environment:
+      MINIREDIS_HOST: "mini-redis"
+      MINIREDIS_PORT: "31337"
+    stdin_open: true
+    tty: true
+    command: ["python", "client_cli.py"]
